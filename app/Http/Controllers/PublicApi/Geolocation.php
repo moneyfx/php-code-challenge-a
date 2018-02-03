@@ -8,7 +8,7 @@ class Geolocation extends Controller
 {
     public function index()
     {
-    	//geoip returns Torann\GeoIP\Location
+    	//**@var Torann\GeoIP\Location
     	$geoip = geoip("104.163.170.48");
 
         return response()->json([
