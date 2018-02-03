@@ -12,5 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return response()->json([
+        'message' => 'Server up and running!',
+        'current_unix_timestamp' => time(),
+    ]);
 });
