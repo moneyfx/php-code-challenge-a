@@ -19,6 +19,6 @@ Route::get('/', function () {
 });
 
 Route::prefix('api/v1')->group(function () {
-	Route::get('geolocation', 'PublicApi\Geolocation@index');
+	Route::get('geolocation/{ip?}', 'PublicApi\Geolocation@index');
 	Route::get('weather', 'PublicApi\Weather@index');
 });

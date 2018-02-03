@@ -6,10 +6,14 @@ use App\Http\Controllers\Controller;
 
 class Geolocation extends Controller
 {
-    public function index()
+    public function index($ip = '')
     {
+    	if (empty($ip)) {
+            $ip = \Request::ip();
+    	}
+        
     	//**@var Torann\GeoIP\Location
-    	$geoip = geoip("104.163.170.48");
+    	$geoip = geoip($ip);
 
         return response()->json([
             'ip' => $geoip->getAttribute('ip'),
