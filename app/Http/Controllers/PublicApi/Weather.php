@@ -17,8 +17,9 @@ class Weather extends Controller
     	$currentWeather = $lowm->getCurrentWeather([
     		'lat' => $lat,
             'lon' => $lon,
+            ],
             'metric'
-        ]);
+        );
 
         return response()->json([
             'ip' => $geoip->getAttribute('ip'),
