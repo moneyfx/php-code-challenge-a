@@ -33,17 +33,11 @@ class Weather extends Controller
             if (empty($city)) {
                 return $this->badRequestResponse($ip);
             }
-        } catch (\Exception $e) {
-            return $this->badRequestResponse($ip, $e->getMessage());
-        }
-
-        try {
             $currentWeather =$this->weatherService->getCurrentWeatherByGeoLocation($lat, $lon);
         } catch (\Exception $e) {
             return $this->badRequestResponse($ip, $e->getMessage());
         }
     	
-
         return response()->json([
             'ip' => $ip,
             'city' => $currentWeather->city->name,
