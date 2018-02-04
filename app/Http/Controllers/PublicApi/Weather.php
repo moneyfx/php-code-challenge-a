@@ -27,6 +27,10 @@ class Weather extends Controller
                 'current' => $currentWeather->temperature->now->getValue(),
                 'low' => $currentWeather->temperature->min->getValue(),
                 'high' => $currentWeather->temperature->max->getValue(),
+            ],
+            'wind' => [
+                'speed' => $currentWeather->wind->speed->getValue(),
+                'direction' => $currentWeather->wind->direction->getValue(),
             ]
         ]);
     }
