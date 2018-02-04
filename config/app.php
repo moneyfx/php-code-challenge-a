@@ -177,6 +177,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         \Torann\GeoIP\GeoIPServiceProvider::class,
+        \Gmopx\LaravelOWM\LaravelOWMServiceProvider::class,
+        
     ],
 
     /*
