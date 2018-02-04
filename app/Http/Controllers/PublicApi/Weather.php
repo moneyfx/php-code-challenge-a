@@ -33,7 +33,7 @@ class Weather extends Controller
             if (empty($city)) {
                 return $this->badRequestResponse($ip);
             }
-            $currentWeather =$this->weatherService->getCurrentWeatherByGeoLocation($lat, $lon);
+            $currentWeather = $this->weatherService->getCurrentWeatherByGeoLocation($lat, $lon);
         } catch (\Exception $e) {
             return $this->badRequestResponse($ip, $e->getMessage());
         }
