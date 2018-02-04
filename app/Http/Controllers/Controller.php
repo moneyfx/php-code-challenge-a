@@ -18,9 +18,12 @@ class Controller extends BaseController
     		$errorMessage = $message;
     	}
     	
-    	return response()->json([
-            'ip' => $ip,
-            'error_message' => $errorMessage,
-        ]);
+    	return response()->json(
+    		[
+            	'ip' => $ip,
+            	'error_message' => $errorMessage,
+        	], 
+        	400
+        );
     }
 }
