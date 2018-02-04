@@ -3,18 +3,20 @@
 namespace App\Http\Controllers\PublicApi;
 
 use App\Http\Controllers\Controller;
-
 use App\Service\Weather as WeatherService;
-use \PulkitJalan\GeoIP\GeoIP;
+use App\Service\GeolocationIp as GeolocationIpService;
 
 class Weather extends Controller
 {
-    private $ipApiService;
+    private $geolocationIpService;
     private $weatherService;
 
-    public function __construct(WeatherService $weatherService) 
-    {
+    public function __construct(
+        WeatherService $weatherService,
+        GeolocationIpService $geolocationIpService
+    ) {
         $this->weatherService = $weatherService;
+        $this->geolocationIpService = $geolocationIpService;
     }
 
     public function index($ip = '')
@@ -23,11 +25,10 @@ class Weather extends Controller
             $ip = \Request::ip();
         }
 
-        $geoip = new GeoIP();
-        $geoip->setIp($ip);
+        $this->geolocationIpService->setIp($ip);
 
-        $lat = $geoip->getLatitude();
-        $lon = $geoip->getLongitude();
+        $lat = $this->geolocationIpService->getLatitude();
+        $lon = $this->geolocationIpService->getLongitude();
 
     	$currentWeather = $this->weatherService->getCurrentWeatherByGeoLocation($lat, 
             $lon
