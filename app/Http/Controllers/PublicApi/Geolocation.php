@@ -2,46 +2,41 @@
 
 namespace App\Http\Controllers\PublicApi;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-use \PulkitJalan\GeoIP\GeoIP;
+use App\Http\Controllers\Controller;
+use App\Service\GeolocationIp as GeolocationIpService;
 
 class Geolocation extends Controller
 {
-    
+    private $geolocationIpService;
+
+    public function __construct(GeolocationIpService $geolocationIpService) 
+    {
+        $this->geolocationIpService = $geolocationIpService;
+    }
+
     public function index($ip = '', Request $request)
     {
     	if (empty($ip)) {
             $ip = \Request::ip();
     	}
-
-        $config = ['driver' => 'ip-api'];
-        $serviceName = 'ip-api';
         
         if ($request->has('service')) {
-            if ($request->query('service') == 'freegeoip') {
-                $serviceName = 'freegeoip';
-                $config = [
-                    'driver' => 'freegeoip',
-                    'freegeoip' => [
-                        'secure' => true,
-                    ] ,
-                ];
+            if ($request->input('service') == GeolocationIpService::FREE_GEO_IP_PROVIDER) {
+                $this->geolocationIpService->setFreegeoipAsProvider();
             }
         }
 
 
-        $geoip = new GeoIP($config);
-        $geoip->setIp($ip);
+        $this->geolocationIpService->setIp($ip);
         
         return response()->json([
             'ip' => $ip,
             'geo' => [
-            	'service' => $serviceName,
-            	'city' => $geoip->getCity(),
-            	'region' => $geoip->getRegion(),
-            	'country' => $geoip->getCountry(),
+            	'service' => $this->geolocationIpService->getProviderName(),
+            	'city' => $this->geolocationIpService->getCity(),
+            	'region' => $this->geolocationIpService->getRegion(),
+            	'country' => $this->geolocationIpService->getCountry(),
             ]
         ]);
     }
