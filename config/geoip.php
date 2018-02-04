@@ -1,143 +1,118 @@
 <?php
 
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | GeoIP Driver Type
+    |--------------------------------------------------------------------------
+    |
+    | Supported: "freegeoip", "ip-api", "maxmind", "telize"
+    |
+    */
+    'driver' => env('GEOIP_DRIVER', 'ip-api'),
 
     /*
     |--------------------------------------------------------------------------
-    | Logging Configuration
+    | Return random ipaddresses (useful for dev envs)
     |--------------------------------------------------------------------------
-    |
-    | Here you may configure the log settings for when a location is not found
-    | for the IP provided.
-    |
     */
-
-    'log_failures' => true,
+    'random' => env('GEOIP_RANDOM', false),
 
     /*
     |--------------------------------------------------------------------------
-    | Include Currency in Results
+    | Free GeoIP Driver
     |--------------------------------------------------------------------------
-    |
-    | When enabled the system will do it's best in deciding the user's currency
-    | by matching their ISO code to a preset list of currencies.
-    |
     */
+    'freegeoip' => [
+        /*
+        |--------------------------------------------------------------------------
+        | Free GeoIP url
+        |--------------------------------------------------------------------------
+        |
+        | Url to self hosted freegeoip (including port) without protocol
+        |
+        */
+        'url' => env('GEOIP_FREEGEOIP_URL'),
 
-    'include_currency' => true,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default Service
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify the default storage driver that should be used
-    | by the framework.
-    |
-    | Supported: "maxmind_database", "maxmind_api", "ipapi"
-    |
-    */
-
-    'service' => 'ipapi',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Storage Specific Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure as many storage drivers as you wish.
-    |
-    */
-
-    'services' => [
-
-        'maxmind_database' => [
-            'class' => \Torann\GeoIP\Services\MaxMindDatabase::class,
-            'database_path' => storage_path('app/geoip.mmdb'),
-            'update_url' => 'https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz',
-            'locales' => ['en'],
-        ],
-
-        'maxmind_api' => [
-            'class' => \Torann\GeoIP\Services\MaxMindWebService::class,
-            'user_id' => env('MAXMIND_USER_ID'),
-            'license_key' => env('MAXMIND_LICENSE_KEY'),
-            'locales' => ['en'],
-        ],
-
-        'ipapi' => [
-            'class' => \Torann\GeoIP\Services\IPApi::class,
-            'secure' => true,
-            'key' => env('IPAPI_KEY'),
-            'continent_path' => storage_path('app/continents.json'),
-        ],
-
+        /*
+        |--------------------------------------------------------------------------
+        | Free GeoIP Secure connection
+        |--------------------------------------------------------------------------
+        |
+        | Use http or https
+        |
+        */
+        'secure' => env('GEOIP_FREEGEOIP_SECURE', true),
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Default Cache Driver
+    | IP-API Driver
     |--------------------------------------------------------------------------
-    |
-    | Here you may specify the type of caching that should be used
-    | by the package.
-    |
-    | Options:
-    |
-    |  all  - All location are cached
-    |  some - Cache only the requesting user
-    |  none - Disable cached
-    |
     */
+    'ip-api' => [
+        /*
+        |--------------------------------------------------------------------------
+        | IP-API Pro Service Key
+        |--------------------------------------------------------------------------
+        |
+        | Check out pro here: https://signup.ip-api.com/
+        |
+        */
+        'key' => env('GEOIP_IPAPI_KEY'),
 
-    'cache' => 'none',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Cache Tags
-    |--------------------------------------------------------------------------
-    |
-    | Cache tags are not supported when using the file or database cache
-    | drivers in Laravel. This is done so that only locations can be cleared.
-    |
-    */
-
-    //'cache_tags' => ['torann-geoip-location'],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Cache Expiration
-    |--------------------------------------------------------------------------
-    |
-    | Define how long cached location are valid.
-    |
-    */
-
-    'cache_expires' => 30,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default Location
-    |--------------------------------------------------------------------------
-    |
-    | Return when a location is not found.
-    |
-    */
-
-    'default_location' => [
-        'ip' => '127.0.0.0',
-        'iso_code' => 'US',
-        'country' => 'United States',
-        'city' => 'New Haven',
-        'state' => 'CT',
-        'state_name' => 'Connecticut',
-        'postal_code' => '06510',
-        'lat' => 41.31,
-        'lon' => -72.92,
-        'timezone' => 'America/New_York',
-        'continent' => 'NA',
-        'default' => true,
-        'currency' => 'USD',
+        /*
+        |--------------------------------------------------------------------------
+        | IP-API Secure connection
+        |--------------------------------------------------------------------------
+        |
+        | Use http or https
+        | Only applicable with the Pro service
+        |
+        */
+        'secure' => env('GEOIP_IPAPI_SECURE', true),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Maxmind Driver
+    |--------------------------------------------------------------------------
+    */
+    'maxmind' => [
+        /*
+        |--------------------------------------------------------------------------
+        | Maxmind Database
+        |--------------------------------------------------------------------------
+        |
+        | Example: app_path().'/database/maxmind/GeoLite2-City.mmdb'
+        |
+        */
+        'database' => base_path().'/'.env('GEOIP_MAXMIND_DATABASE', 'database/geoip/GeoLite2-City.mmdb'),
+
+        /*
+        |--------------------------------------------------------------------------
+        | Maxmind Web Service Info
+        |--------------------------------------------------------------------------
+        */
+        'user_id' => env('GEOIP_MAXMIND_USER_ID'),
+        'license_key' => env('GEOIP_MAXMIND_LICENSE_KEY'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Telize Driver
+    |--------------------------------------------------------------------------
+    */
+    'telize' => [
+        /*
+        |--------------------------------------------------------------------------
+        | Telize Service Key
+        |--------------------------------------------------------------------------
+        |
+        | Get your API key here: https://market.mashape.com/fcambus/telize
+        |
+        */
+
+         'key' => env('GEOIP_TELIZE_KEY'),
+    ],
 ];
