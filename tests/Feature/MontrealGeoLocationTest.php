@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class MontrealGeoLocationTest extends TestCase
 {
     /**
-     * A basic test example.
+     * Get Montreal City by ip
      *
      * @return void
      */
