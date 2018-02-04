@@ -18,7 +18,6 @@ class Weather extends Controller
     		'lat' => $lat,
             'lon' => $lon,
             ],
-            'metric'
         );
 
         return response()->json([
