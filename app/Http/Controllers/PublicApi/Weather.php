@@ -4,20 +4,25 @@ namespace App\Http\Controllers\PublicApi;
 
 use App\Http\Controllers\Controller;
 use Gmopx\LaravelOWM\LaravelOWM;
+use App\Service\Weather as WeatherService;
 
 class Weather extends Controller
 {
+    private $weatherService;
+
+    public function __construct(WeatherService $weatherService)
+    {
+        $this->weatherService = $weatherService;
+    }
+
     public function index($ip = '')
     {
     	$geoip = geoip($ip);
     	$lat = $geoip->getAttribute('lat');
     	$lon = $geoip->getAttribute('lon');
 
-    	$lowm = new LaravelOWM();
-    	$currentWeather = $lowm->getCurrentWeather([
-    		'lat' => $lat,
-            'lon' => $lon,
-            ]
+    	$currentWeather = $this->weatherService->getCurrentWeatherByGeoLocation($lat, 
+            $lon
         );
 
         return response()->json([
