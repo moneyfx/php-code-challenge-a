@@ -25,14 +25,24 @@ class Weather extends Controller
             $ip = \Request::ip();
         }
 
-        $this->geolocationIpService->setIp($ip);
+        try {
+            $this->geolocationIpService->setIp($ip);
+            $city = $this->geolocationIpService->getCity();
+            $lat = $this->geolocationIpService->getLatitude();
+            $lon = $this->geolocationIpService->getLongitude();
+            if (empty($city)) {
+                return $this->badRequestResponse($ip);
+            }
+        } catch (\Exception $e) {
+            return $this->badRequestResponse($ip, $e->getMessage());
+        }
 
-        $lat = $this->geolocationIpService->getLatitude();
-        $lon = $this->geolocationIpService->getLongitude();
-
-    	$currentWeather = $this->weatherService->getCurrentWeatherByGeoLocation($lat, 
-            $lon
-        );
+        try {
+            $currentWeather =$this->weatherService->getCurrentWeatherByGeoLocation($lat, $lon);
+        } catch (\Exception $e) {
+            return $this->badRequestResponse($ip, $e->getMessage());
+        }
+    	
 
         return response()->json([
             'ip' => $ip,

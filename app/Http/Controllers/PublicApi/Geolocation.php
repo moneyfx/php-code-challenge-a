@@ -27,9 +27,17 @@ class Geolocation extends Controller
             }
         }
 
-
-        $this->geolocationIpService->setIp($ip);
+        try {
+            $this->geolocationIpService->setIp($ip);
+            $city = $this->geolocationIpService->getCity();
+            if (empty($city)) {
+                return $this->badRequestResponse($ip);
+            }
+        } catch (\Exception $e) {
+            return $this->badRequestResponse($ip, $e->getMessage());
+        }
         
+
         return response()->json([
             'ip' => $ip,
             'geo' => [
